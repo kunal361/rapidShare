@@ -8,18 +8,24 @@ class DocumentsController < ApplicationController
   end
 
   def create
-    name = File.basename(params[:doc].original_filename)
+    description = params[:description]
+    document = params[:doc]
+    if !description || !document
+      flash[:notice] = "Params Error"
+      redirect_to "/add"
+    end
+    name = File.basename(document.original_filename)
     dir = "public/documents/"
     Dir.mkdir(dir) unless File.exists?(dir)
     path = File.join(dir, name)
     begin
-      Documents.new({:name => name, :description => params[:description]}).save
+      Documents.new({:name => name, :description => description}).save
       begin
-        File.open(path, "wb") { |f| f.write(params[:doc].read) }
+        File.open(path, "wb") { |f| f.write(document.read) }
         redirect_to "/documents"
       rescue
         flash[:notice]="Error uploading file"
-        doc = Documents.where({:name => "temp.js"})[0]
+        doc = Documents.where({:name => name})[0]
         Documents.delete(doc.id)
         redirect_to "/add"
       end
