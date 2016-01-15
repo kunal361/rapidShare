@@ -1,0 +1,30 @@
+<title>Add Document</title>
+<script type="text/javascript">
+  validateform = function(){
+    var description = document.forms["myform"]["description"].value;
+    var doc = document.forms["myform"]["doc"].value;
+    if(description=="" || description == null){
+      alert("description missing");
+      return false;
+    }
+    if(doc=="" || doc == null){
+      alert("document missing");
+      return false;
+    }
+    return true;
+  }
+</script>
+<% form_tag "/add", { :multipart => true, :id => "myform"} do%>
+  <p>
+    <%= label_tag "document" %>
+    <%= file_field_tag :doc %><br/>
+    <%= label_tag "description" %>
+    <%= text_field_tag :description %>
+  </p>
+  <p>
+    <%= submit_tag "Upload", :onclick => "return validateform();" %>
+  </p>
+<% end %>
+<div id="add">
+  <%= link_to "View Documents", "/documents"%>
+</div>
