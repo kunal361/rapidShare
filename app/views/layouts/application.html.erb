@@ -22,6 +22,19 @@
     </script>
     <%flash[:notice]=nil%>
   <% end %>
+  <div class="nav">
+    <% if current_user %>
+      <ul>
+        <li><%= current_user.email %></li>
+        <li><%= link_to "Log out", logout_url, :method => "delete" %></li>
+      </ul>
+    <% else %>
+      <ul>
+        <li><%= link_to "Log in", login_url %></a></li>
+        <li><%= link_to "Sign up", signup_url %></a></li>
+      </ul>
+    <% end %>
+  </div>
 <%= yield %>
 
 </body>
