@@ -1,8 +1,26 @@
 RapidShare::Application.routes.draw do
-  get "/documents" => 'documents#index'
-  get "/add" => 'documents#new'
-  post "/add" => 'documents#create'
-  get "/delete/:id" => 'documents#delete'
+
+  get 'sessions/new'
+
+  get 'sessions/create'
+
+  get 'sessions/destroy'
+
+  root :to => 'documents#index'
+
+  get '/documents' => 'documents#index'
+  get '/add' => 'documents#new'
+  post '/add' => 'documents#create'
+  get '/delete/:id' => 'documents#delete'
+
+  get '/users' => 'users#index'
+  get '/signup' => 'users#new'
+  post '/signup' => 'users#create'
+  get '/delete_user/:id' => 'users#delete'
+
+  get '/login' => 'sessions#new'
+  post '/login' => 'sessions#create'
+  delete '/logout' => 'sessions#destroy'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -60,4 +78,5 @@ RapidShare::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
+  get "*path", :to => redirect('/')
 end

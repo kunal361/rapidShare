@@ -1,0 +1,11 @@
+<div id="users">
+  <%@users.each do |user|%>
+    <div class="user" style="border: 1px solid; width:300px">
+      <div>Name: <%=user.name%></div>
+      <div>Email: <%=user.email%></div>
+      <div>Join date: <%=user.created_at%></div>
+      <div><a href="/delete_user/<%=user.id%>">Delete</a></div>
+    </div>
+  <%end%>
+  <%= link_to "Documents", root_url%>
+</div>
