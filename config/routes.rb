@@ -1,11 +1,5 @@
 RapidShare::Application.routes.draw do
 
-  get 'sessions/new'
-
-  get 'sessions/create'
-
-  get 'sessions/destroy'
-
   root :to => 'documents#index'
 
   get '/documents' => 'documents#index'
