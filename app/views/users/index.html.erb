@@ -5,7 +5,11 @@
       <div>Email: <%=user.email%></div>
       <div>Join date: <%=user.created_at%></div>
       <div><a href="/delete_user/<%=user.id%>">Delete</a></div>
+      <%if user.admin?%>
+        <div><a href="/delete_admin/<%=user.id%>">Delete Admin</a></div>
+      <%else%>
+        <div><a href="/add_admin/<%=user.id%>">Add Admin</a></div>
+      <%end%>
     </div>
   <%end%>
-  <%= link_to "Documents", root_url%>
 </div>

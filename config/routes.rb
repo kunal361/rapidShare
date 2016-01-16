@@ -17,6 +17,8 @@ RapidShare::Application.routes.draw do
   get '/signup' => 'users#new'
   post '/signup' => 'users#create'
   get '/delete_user/:id' => 'users#delete'
+  get '/delete_admin/:id' => 'users#d_admin'
+  get '/add_admin/:id' => 'users#a_admin'
 
   get '/login' => 'sessions#new'
   post '/login' => 'sessions#create'

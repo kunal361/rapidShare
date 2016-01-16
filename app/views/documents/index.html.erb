@@ -1,17 +1,10 @@
 <title>Documents</title>
 <div id="container">
-  <div id="add">
-    <%= link_to "Add Document", add_url%>
-    <% if current_user.admin? %>
-      <%= link_to "Users", users_url%>
-    <%end%>
-  </div>
   <div id="docs" style="width: 200px">
     <%@documents.each do |document|%>
       <div class="doc" style="border: 1px solid;width: 100%">
         Document:<a class ="link" href='/documents/<%=document.name%>' download><%=document.name%></a>
         <p class="description">Description: <%=document.description%><p>
-        <%puts document.user_id, session[:user_id]%>
         <%if document.user_id == session[:user_id] || current_user.admin? %>
           <a href="/delete/<%=document.id%>">Delete</a>
         <%end%>

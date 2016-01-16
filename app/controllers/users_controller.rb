@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_filter :require_admin, :only => [:index, :delete]
+  before_filter :require_admin, :only => [:index, :delete, :d_admin, :a_admin]
 
   def index
     @users = Users.all
@@ -13,7 +13,6 @@ class UsersController < ApplicationController
     name = params[:user][:name]
     email = params[:user][:email]
     password = params[:user][:password]
-    puts name, email, password
     if !name || !email || !password || name== "" || email== "" || password== ""
       flash[:notice]="Params Error"
       redirect_to signup_url
@@ -33,6 +32,20 @@ class UsersController < ApplicationController
   def delete
     flash[:notice]="User deleted"
     Users.delete(params[:id])
+    redirect_to users_url
+  end
+
+  def a_admin
+    user = Users.find(params[:id])
+    user.role = "admin"
+    user.save
+    redirect_to users_url
+  end
+
+  def d_admin
+    user = Users.find(params[:id])
+    user.role = nil
+    user.save
     redirect_to users_url
   end
 
