@@ -7,7 +7,7 @@ gem 'rails', '3.0.20'
 
 gem 'sqlite3'
 
-gem 'bcrypt', '~> 3.1.7'
+gem "bcrypt-ruby", :require => "bcrypt"
 # Use unicorn as the web server
 # gem 'unicorn'
 
