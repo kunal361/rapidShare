@@ -3,7 +3,7 @@
   <div id="docs" style="width: 200px">
     <%@documents.each do |document|%>
       <div class="doc" style="border: 1px solid;width: 100%">
-        Document:<a class ="link" href='/documents/<%=document.name%>' download><%=document.name%></a>
+        Document:<a class ="link" href='/documents/<%=document.id%>'><%=document.name%></a>
         <p class="description">Description: <%=document.description%><p>
         <%if document.user_id == session[:user_id] || current_user.admin? %>
           <a href="/delete/<%=document.id%>">Delete</a>

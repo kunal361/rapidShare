@@ -5,6 +5,7 @@ RapidShare::Application.routes.draw do
   get '/documents' => 'documents#index'
   get '/add' => 'documents#new'
   post '/add' => 'documents#create'
+  get '/documents/:id' => 'documents#show'
   get '/delete/:id' => 'documents#delete'
 
   get '/users' => 'users#index'

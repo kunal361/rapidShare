@@ -1,6 +1,6 @@
 class DocumentsController < ApplicationController
 
-  before_filter :require_user, :only => [:new, :index, :delete]
+  before_filter :require_user, :only => [:new, :index, :delete, :show]
 
   def index
     @documents = Documents.all
@@ -18,7 +18,7 @@ class DocumentsController < ApplicationController
     else
       user = session[:user_id]
       name = File.basename(document.original_filename)
-      dir = "public/documents/"
+      dir = "documents/"
       Dir.mkdir(dir) unless File.exists?(dir)
       path = File.join(dir, name)
       begin
@@ -39,6 +39,20 @@ class DocumentsController < ApplicationController
         flash.alert
         redirect_to add_url
       end
+    end
+  end
+
+  def show
+    begin
+      document = Documents.find(params[:id])
+      path = "documents/#{document.name}"
+      File.open(path, "r") do |f|
+        send_data f.read, :filename => document.name
+      end
+    rescue Exception => e
+      puts e
+      flash[:notice]="no such file"
+      redirect_to root_url
     end
   end
 
