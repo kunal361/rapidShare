@@ -21,9 +21,11 @@ class UsersController < ApplicationController
       redirect_to signup_url
     else
       begin
-        user = Users.new({:name => name, :email => email, :password_digest => BCrypt::Password.create(password)}).save
-        flash[:notice]="Sucessfully signed up...Please login"
-        redirect_to login_url
+        user = Users.new({:name => name, :email => email, :password_digest => BCrypt::Password.create(password)})
+        user.save
+        flash[:notice]="Sucessfully signed up..."
+        session[:user_id] = user.id
+        redirect_to root_url
       rescue Exception => e
         puts e
         flash[:notice]="Email id already exists"
