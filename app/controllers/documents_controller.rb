@@ -61,7 +61,7 @@ class DocumentsController < ApplicationController
       @document = Documents.find(params[:id])
       if @document.user_id == session[:user_id] || current_user.admin?
         begin
-          File.delete("public/documents/"+@document.name)
+          File.delete("documents/"+@document.name)
           Documents.delete(params[:id])
           flash[:notice]="File Deleted Successfully"
         rescue
