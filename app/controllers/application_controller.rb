@@ -15,4 +15,8 @@ class ApplicationController < ActionController::Base
     redirect_to root_url unless current_user && current_user.admin?
   end
 
+  def redirect_if_signed_in?
+    redirect_to root_url if current_user
+  end
+
 end

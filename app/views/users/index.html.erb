@@ -4,12 +4,14 @@
       <div>Name: <%=user.name%></div>
       <div>Email: <%=user.email%></div>
       <div>Join date: <%=user.created_at%></div>
-      <div><a href="/delete_user/<%=user.id%>">Delete</a></div>
-      <%if user.admin?%>
-        <div><a href="/delete_admin/<%=user.id%>">Delete Admin</a></div>
-      <%else%>
-        <div><a href="/add_admin/<%=user.id%>">Add Admin</a></div>
-      <%end%>
+      <div><%= link_to "Delete User", "/delete_user/#{user.id}", :method => "delete" %></div>
+      <div>
+        <%if user.admin?%>
+          <%= link_to "Delete Admin", "/delete_admin/#{user.id}", :method => "put" %>
+        <%else%>
+          <%= link_to "Add Admin", "/add_admin/#{user.id}", :method => "put" %>
+        <%end%>
+      </div>
     </div>
   <%end%>
 </div>

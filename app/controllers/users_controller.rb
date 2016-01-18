@@ -1,15 +1,13 @@
 class UsersController < ApplicationController
 
-  before_filter :require_admin, :only => [:index, :delete, :d_admin, :a_admin]
+  before_filter :redirect_if_signed_in?, :only => [:new]
+  before_filter :require_admin, :only => [:index, :destroy, :d_admin, :a_admin]
 
   def index
     @users = Users.all
   end
 
   def new
-    if current_user
-      redirect_to root_url
-    end
   end
 
   def create
@@ -34,7 +32,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def delete
+  def destroy
     begin
       if Users.delete(params[:id]) != 0
         flash[:notice]="User Deleted"

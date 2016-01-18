@@ -1,6 +1,6 @@
 class DocumentsController < ApplicationController
 
-  before_filter :require_user, :only => [:new, :index, :delete, :show]
+  before_filter :require_user, :only => [:new, :index, :destroy, :show]
 
   def index
     @documents = Documents.all
@@ -56,24 +56,22 @@ class DocumentsController < ApplicationController
     end
   end
 
-  def delete
+  def destroy
     begin
       @document = Documents.find(params[:id])
       if @document.user_id == session[:user_id] || current_user.admin?
         begin
           File.delete("documents/"+@document.name)
           Documents.delete(params[:id])
-          flash[:notice]="File Deleted Successfully"
+          flash[:notice]="File deleted"
         rescue
-          flash[:notice]="Error deleting file"
+          flash[:notice]="You do not own this file"
         end
-      else
-        flash[:notice]="You do not own the file"
       end
     rescue
-      flash[:notice]="no such file"
+      flash[:notice]="No such file"
     end
-    redirect_to documents_url
+    redirect_to root_url
   end
 
 end

@@ -1,9 +1,8 @@
 class SessionsController < ApplicationController
 
+  before_filter :redirect_if_signed_in?, :only => [:new]
+
   def new
-    if current_user
-      redirect_to root_url
-    end
   end
 
   def create
