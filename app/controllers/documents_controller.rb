@@ -3,7 +3,7 @@ class DocumentsController < ApplicationController
   before_filter :require_user, :only => [:new, :index, :destroy, :show]
 
   def index
-    @documents = Documents.all
+    @documents = Document.all
   end
 
   def new
@@ -22,15 +22,15 @@ class DocumentsController < ApplicationController
       Dir.mkdir(dir) unless File.exists?(dir)
       path = File.join(dir, name)
       begin
-        Documents.new({:name => name, :description => description, :user_id => user}).save
+        Document.new({:name => name, :description => description, :user_id => user}).save
         begin
           File.open(path, "wb") { |f| f.write(document.read) }
           flash[:notice]="File Uploaded Successfully!"
           redirect_to documents_url
         rescue
           flash[:notice]="Error uploading file"
-          doc = Documents.where({:name => name})[0]
-          Documents.delete(doc.id)
+          doc = Document.where({:name => name})[0]
+          Document.delete(doc.id)
           redirect_to add_url
         end
       rescue Exception => e 
@@ -44,7 +44,7 @@ class DocumentsController < ApplicationController
 
   def show
     begin
-      document = Documents.find(params[:id])
+      document = Document.find(params[:id])
       path = "documents/#{document.name}"
       File.open(path, "r") do |f|
         send_data f.read, :filename => document.name
@@ -58,11 +58,11 @@ class DocumentsController < ApplicationController
 
   def destroy
     begin
-      @document = Documents.find(params[:id])
+      @document = Document.find(params[:id])
       if @document.user_id == session[:user_id] || current_user.admin?
         begin
           File.delete("documents/"+@document.name)
-          Documents.delete(params[:id])
+          Document.delete(params[:id])
           flash[:notice]="File deleted"
         rescue
           flash[:notice]="You do not own this file"

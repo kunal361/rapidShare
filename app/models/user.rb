@@ -1,5 +1,5 @@
 require 'bcrypt'
-class Users < ActiveRecord::Base
+class User < ActiveRecord::Base
   include BCrypt
   has_many :documents
   def admin?

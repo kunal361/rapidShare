@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
       flash[:notice] = "Params Error"
       redirect_to login_url
     else
-      user = Users.find_by_email(email)
+      user = User.find_by_email(email)
       if user && BCrypt::Password.new(user.password_digest) == password
         session[:user_id] = user.id
         redirect_to root_url

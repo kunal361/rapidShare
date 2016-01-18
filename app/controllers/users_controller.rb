@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_filter :require_admin, :only => [:index, :destroy, :d_admin, :a_admin]
 
   def index
-    @users = Users.all
+    @users = User.all
   end
 
   def new
@@ -19,13 +19,13 @@ class UsersController < ApplicationController
       redirect_to signup_url
     else
       begin
-        user = Users.new({:name => name, :email => email, :password_digest => BCrypt::Password.create(password)})
+        user = User.new({:name => name, :email => email, :password_digest => BCrypt::Password.create(password)})
         user.save
         flash[:notice]="Sucessfully signed up..."
         session[:user_id] = user.id
         redirect_to root_url
       rescue Exception => e
-        puts e
+        puts e, e.backtrace.join("\n")
         flash[:notice]="Email id already exists"
         redirect_to signup_url
       end
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 
   def destroy
     begin
-      if Users.delete(params[:id]) != 0
+      if User.delete(params[:id]) != 0
         flash[:notice]="User Deleted"
       else
         flash[:notice]="No Such User"
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
 
   def a_admin
     begin
-      user = Users.find(params[:id])
+      user = User.find(params[:id])
       user.role = "admin"
       user.save
       flash[:notice]="Admin Added"
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
 
   def d_admin
     begin
-      user = Users.find(params[:id])
+      user = User.find(params[:id])
       user.role = nil
       user.save
       flash[:notice]="Admin Removed"
