@@ -32,7 +32,7 @@ class DocumentsController < ApplicationController
 
   def show
     if document = Document.find_by_id(params[:id])
-      path = document.path
+      path = document.document.path
       File.open(path, "r") do |f|
         send_data f.read, :filename => document.name
       end
