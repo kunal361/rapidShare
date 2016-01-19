@@ -15,7 +15,6 @@ class DocumentsController < ApplicationController
     user = session[:user_id]
     temp = current_user.documents.build(:path => document, :description => description)
     if temp.save
-      File.open(temp.path, "wb") { |f| f.write(document.read) }
       flash[:notice]="File Uploaded Successfully!"
       redirect_to documents_url
     else
