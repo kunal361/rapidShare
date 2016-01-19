@@ -1,12 +1,16 @@
 class Document < ActiveRecord::Base
-  before_validation :set_params
   belongs_to :user
+
+  before_validation :set_params
+  after_save :upload
+  after_destroy :delete_document
+
   validates :description, :presence => true
   validates :name, :presence => true, :uniqueness =>true
   validates :path, :presence => true
   validates :user_id, :presence => true
-  after_save :upload
-  after_destroy :delete_document
+
+  private
 
   def set_params
     return false if self.path.nil?
