@@ -40,9 +40,8 @@ class UsersController < ApplicationController
   end
 
   def a_admin
-    user = User.where({:id => params[:id]})
-    if !user.empty?
-      user.first.change_role("admin")
+    if user = User.find_by_id(params[:id])
+      user.change_role("admin")
       flash[:notice]="Admin Added"
     else
       flash[:notice]="No Such User"
@@ -51,9 +50,8 @@ class UsersController < ApplicationController
   end
 
   def d_admin
-    user = User.where({:id => params[:id]})
-    if !user.empty?
-      user.first.change_role(nil)
+    if user = User.find_by_id(params[:id])
+      user.change_role(nil)
       flash[:notice]="Admin removed"
     else
       flash[:notice]="No Such User"

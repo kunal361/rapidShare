@@ -12,7 +12,6 @@ class DocumentsController < ApplicationController
   def create
     description = params[:document][:description]
     document = params[:document][:doc]
-    user = session[:user_id]
     temp = current_user.documents.build(:path => document, :description => description)
     if temp.save
       flash[:notice]="File Uploaded Successfully!"
@@ -31,12 +30,10 @@ class DocumentsController < ApplicationController
   end
 
   def show
-    document = Document.where({:id => params[:id]})
-    if !document.empty?
-      doc = document.first
+    if document = Document.find_by_id(params[:id])
       path = document.path
       File.open(path, "r") do |f|
-        send_data f.read, :filename => doc.name
+        send_data f.read, :filename => document.name
       end
     else
       flash[:notice]="no such file"
@@ -45,10 +42,8 @@ class DocumentsController < ApplicationController
   end
 
   def destroy
-    document = Document.where({:id => params[:id]})
-    if !document.empty?
-      doc = document.first
-      if doc.user_id == session[:user_id] || current_user.admin?
+    if document = Document.find_by_id(params[:id])
+      if document.user_id == session[:user_id] || current_user.admin?
         Document.destroy(params[:id])
         flash[:notice]="File deleted"
       else
