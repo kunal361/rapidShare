@@ -6,6 +6,7 @@ class Document < ActiveRecord::Base
   validates :path, :presence => true
   validates :user_id, :presence => true
   after_save :upload
+  after_destroy :delete_document
 
   def set_params
     return false if self.path.nil?
@@ -19,6 +20,10 @@ class Document < ActiveRecord::Base
 
   def upload
     File.open(self.path, "wb") { |f| f.write(@document.read) }
+  end
+
+  def delete_document
+    File.delete(self.path) if File.exists?(self.path)
   end
 
 end

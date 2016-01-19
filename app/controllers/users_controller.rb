@@ -31,33 +31,31 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    begin
-      if User.delete(params[:id]) != 0
-        flash[:notice]="User Deleted"
-      else
-        flash[:notice]="No Such User"
-      end
-    rescue
-      flash[:notice]="Error Deleting User"
+    if User.delete(params[:id]) != 0
+      flash[:notice]="User Deleted"
+    else
+      flash[:notice]="No Such User"
     end
     redirect_to users_url
   end
 
   def a_admin
-    begin
-      User.where(:id => params[:id]).update_all(:role => "admin")
+    user = User.where({:id => params[:id]})
+    if !user.empty?
+      user.first.change_role(params[:id], "admin")
       flash[:notice]="Admin Added"
-    rescue
+    else
       flash[:notice]="No Such User"
     end
     redirect_to users_url
   end
 
   def d_admin
-    begin
-      User.where(:id => params[:id]).update_all(:role => nil)
-      flash[:notice]="Admin Removed"
-    rescue
+    user = User.where({:id => params[:id]})
+    if !user.empty?
+      user.first.change_role(params[:id], "nil")
+      flash[:notice]="Admin removed"
+    else
       flash[:notice]="No Such User"
     end
     redirect_to users_url

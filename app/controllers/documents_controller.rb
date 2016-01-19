@@ -31,25 +31,26 @@ class DocumentsController < ApplicationController
   end
 
   def show
-    begin
-      document = Document.find(params[:id])
+    document = Document.where({:id => params[:id]})
+    if !document.empty?
+      doc = document.first
       path = document.path
       File.open(path, "r") do |f|
-        send_data f.read, :filename => document.name
+        send_data f.read, :filename => doc.name
       end
-    rescue Exception => e
-      puts e
+    else
       flash[:notice]="no such file"
       redirect_to root_url
     end
   end
 
   def destroy
-    if document = Document.find(params[:id])
-      if document.user_id == session[:user_id] || current_user.admin?
-          File.delete(document.path)
-          Document.delete(params[:id])
-          flash[:notice]="File deleted"
+    document = Document.where({:id => params[:id]})
+    if !document.empty?
+      doc = document.first
+      if doc.user_id == session[:user_id] || current_user.admin?
+        Document.destroy(params[:id])
+        flash[:notice]="File deleted"
       else
         flash[:notice]="You do not own this file"
       end

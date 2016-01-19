@@ -10,4 +10,13 @@ class User < ActiveRecord::Base
     self.role =='admin'
   end
 
+  def change_role(user_id, role)
+    user = User.where(:id => user_id)
+    if user.empty?
+      return false
+    end
+    user.first.update_attribute(:role, role)
+    return true
+  end
+
 end
