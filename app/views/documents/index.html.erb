@@ -5,9 +5,7 @@
       <div class="doc" style="border: 1px solid;width: 100%">
         Document:<a class ="link" href='<%=document.document.url%>'><%=document.name%></a>
         <p class="description">Description: <%=document.description%><p>
-        <%if document.user_id == session[:user_id] || current_user.admin? %>
-          <%= link_to "Delete", "/delete_document/#{document.id}", :method => "delete" %>
-        <%end%>
+        <%= link_to "Delete", "/delete_document/#{document.id}", :method => "delete" %>
       </div>
     <%end%>
   </div>

@@ -3,7 +3,11 @@ class DocumentsController < ApplicationController
   before_filter :require_user, :only => [:new, :index, :destroy, :show]
 
   def index
-    @documents = Document.all
+    if current_user.admin?
+      @documents = Document.all
+    else
+      @documents = current_user.documents
+    end
   end
 
   def new
