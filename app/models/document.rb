@@ -2,12 +2,12 @@ class Document < ActiveRecord::Base
   belongs_to :user
   has_attached_file :document, :path => "documents/:filename", :url => "document/:id"
 
+  after_validation :add_hash_to_filename
+
   validates :description, :presence => true
   validates_attachment :document, :presence => true
   validates_attachment_file_name :document, :presence => true, :not => ""
   validates :user_id, :presence => true
-
-  after_validation :add_hash_to_filename
 
   def add_hash_to_filename
     hash = DateTime.now.strftime("%Q")

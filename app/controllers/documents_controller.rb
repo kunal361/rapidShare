@@ -27,12 +27,10 @@ class DocumentsController < ApplicationController
   end
 
   def show
-    document = Document.where({:id => params[:id]})
-    if !document.empty?
-      doc = document.first
-      path = doc.document.path
+    if document = Document.find_by_id(params[:id])
+      path = document.path
       File.open(path, "r") do |f|
-        send_data f.read, :filename => doc.name
+        send_data f.read, :filename => document.name
       end
     else
       flash[:notice]="no such file"
@@ -41,10 +39,8 @@ class DocumentsController < ApplicationController
   end
 
   def destroy
-    document = Document.where({:id => params[:id]})
-    if !document.empty?
-      doc = document.first
-      if doc.user_id == session[:user_id] || current_user.admin?
+    if document = Document.find_by_id(params[:id])
+      if document.user_id == session[:user_id] || current_user.admin?
         Document.destroy(params[:id])
         flash[:notice]="File deleted"
       else
