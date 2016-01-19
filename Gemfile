@@ -11,6 +11,7 @@ gem 'sqlite3'
 gem 'jquery-rails'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'pry-rails'
+gem 'paperclip'
 # Use unicorn as the web server
 # gem 'unicorn'
 

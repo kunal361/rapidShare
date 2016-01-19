@@ -3,11 +3,11 @@ class CreateDocuments < ActiveRecord::Migration
     create_table :documents do |t|
       t.string :name
       t.string :description
-      t.string :path
       t.references :user
       t.timestamps
     end
-    add_index :documents, :name, :unique => true
+    add_attachment :documents, :document
+    add_index :documents, :document_file_name, :unique => true
   end
 
   def self.down

@@ -16,13 +16,16 @@ ActiveRecord::Schema.define(:version => 20160115085806) do
   create_table "documents", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.string   "path"
     t.integer  "user_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+    t.string   "document_file_name"
+    t.string   "document_content_type"
+    t.integer  "document_file_size"
+    t.datetime "document_updated_at"
   end
 
-  add_index "documents", ["name"], :name => "index_documents_on_name", :unique => true
+  add_index "documents", ["document_file_name"], :name => "index_documents_on_document_file_name", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "name"

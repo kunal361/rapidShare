@@ -12,8 +12,7 @@ class DocumentsController < ApplicationController
   def create
     description = params[:document][:description]
     document = params[:document][:doc]
-    user = session[:user_id]
-    temp = current_user.documents.build(:path => document, :description => description)
+    temp = current_user.documents.build(:document => document, :description => description)
     if temp.save
       flash[:notice]="File Uploaded Successfully!"
       redirect_to documents_url
@@ -21,10 +20,7 @@ class DocumentsController < ApplicationController
       flash[:notice]=""
       errors = temp.errors.full_messages
       errors.each do |error|
-        flash[:notice] += error
-      end
-      if flash[:notice].empty?
-        flash[:notice] = "No Attachment"
+        flash[:notice] += "#{error}. "
       end
       redirect_to add_url
     end
@@ -34,7 +30,7 @@ class DocumentsController < ApplicationController
     document = Document.where({:id => params[:id]})
     if !document.empty?
       doc = document.first
-      path = document.path
+      path = doc.document.path
       File.open(path, "r") do |f|
         send_data f.read, :filename => doc.name
       end

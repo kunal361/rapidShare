@@ -1,29 +1,18 @@
 class Document < ActiveRecord::Base
-  before_validation :set_params
   belongs_to :user
+  has_attached_file :document, :path => "documents/:filename", :url => "document/:id"
+
   validates :description, :presence => true
-  validates :name, :presence => true, :uniqueness =>true
-  validates :path, :presence => true
+  validates_attachment :document, :presence => true
+  validates_attachment_file_name :document, :presence => true, :not => ""
   validates :user_id, :presence => true
-  after_save :upload
-  after_destroy :delete_document
 
-  def set_params
-    return false if self.path.nil?
-    @document = self.path
-    self.name = File.basename(@document.original_filename)
-    dir = "documents/"
-    Dir.mkdir(dir) unless File.exists?(dir)
-    self.path = File.join(dir, name)
-    return true
-  end
+  after_validation :add_hash_to_filename
 
-  def upload
-    File.open(self.path, "wb") { |f| f.write(@document.read) }
-  end
-
-  def delete_document
-    File.delete(self.path) if File.exists?(self.path)
+  def add_hash_to_filename
+    hash = DateTime.now.strftime("%Q")
+    self.name = self.document_file_name
+    self.document_file_name = "#{hash}_#{self.document_file_name}"
   end
 
 end
