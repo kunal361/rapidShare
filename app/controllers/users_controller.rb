@@ -14,21 +14,19 @@ class UsersController < ApplicationController
     name = params[:user][:name]
     email = params[:user][:email]
     password = params[:user][:password]
-    if !name || !email || !password || name== "" || email== "" || password== ""
-      flash[:notice]="Params Error"
-      redirect_to signup_url
+    user = User.new({:name => name, :email => email, :password => password})
+    if user.save
+      session[:user_id] = user.id
+      flash[:notice]="Sucessfully signed up..."
+      redirect_to root_url
     else
-      begin
-        user = User.new({:name => name, :email => email, :password_digest => BCrypt::Password.create(password)})
-        user.save
-        flash[:notice]="Sucessfully signed up..."
-        session[:user_id] = user.id
-        redirect_to root_url
-      rescue Exception => e
-        puts e, e.backtrace.join("\n")
-        flash[:notice]="Email id already exists"
-        redirect_to signup_url
+      errors = user.errors.full_messages
+      puts errors
+      flash[:notice] = ""
+      errors.each do |error|
+        flash[:notice] += "#{error}. "
       end
+      redirect_to signup_url
     end
   end
 
@@ -47,9 +45,7 @@ class UsersController < ApplicationController
 
   def a_admin
     begin
-      user = User.find(params[:id])
-      user.role = "admin"
-      user.save
+      User.where(:id => params[:id]).update_all(:role => "admin")
       flash[:notice]="Admin Added"
     rescue
       flash[:notice]="No Such User"
@@ -59,9 +55,7 @@ class UsersController < ApplicationController
 
   def d_admin
     begin
-      user = User.find(params[:id])
-      user.role = nil
-      user.save
+      User.where(:id => params[:id]).update_all(:role => nil)
       flash[:notice]="Admin Removed"
     rescue
       flash[:notice]="No Such User"

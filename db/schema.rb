@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -15,9 +16,10 @@ ActiveRecord::Schema.define(:version => 20160115085806) do
   create_table "documents", :force => true do |t|
     t.string   "name"
     t.string   "description"
+    t.string   "path"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "documents", ["name"], :name => "index_documents_on_name", :unique => true
@@ -27,8 +29,8 @@ ActiveRecord::Schema.define(:version => 20160115085806) do
     t.string   "email"
     t.string   "password_digest"
     t.string   "role"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

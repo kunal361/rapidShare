@@ -10,42 +10,31 @@ class DocumentsController < ApplicationController
   end
 
   def create
-    description = params[:description]
-    document = params[:doc]
-    if !description || !document
-      flash[:notice] = "Params Error"
-      redirect_to add_url
+    description = params[:document][:description]
+    document = params[:document][:doc]
+    user = session[:user_id]
+    temp = current_user.documents.build(:path => document, :description => description)
+    if temp.save
+      File.open(temp.path, "wb") { |f| f.write(document.read) }
+      flash[:notice]="File Uploaded Successfully!"
+      redirect_to documents_url
     else
-      user = session[:user_id]
-      name = File.basename(document.original_filename)
-      dir = "documents/"
-      Dir.mkdir(dir) unless File.exists?(dir)
-      path = File.join(dir, name)
-      begin
-        Document.new({:name => name, :description => description, :user_id => user}).save
-        begin
-          File.open(path, "wb") { |f| f.write(document.read) }
-          flash[:notice]="File Uploaded Successfully!"
-          redirect_to documents_url
-        rescue
-          flash[:notice]="Error uploading file"
-          doc = Document.where({:name => name})[0]
-          Document.delete(doc.id)
-          redirect_to add_url
-        end
-      rescue Exception => e 
-        puts e
-        flash[:notice]="File with similar name already present"
-        flash.alert
-        redirect_to add_url
+      flash[:notice]=""
+      errors = temp.errors.full_messages
+      errors.each do |error|
+        flash[:notice] += error
       end
+      if flash[:notice].empty?
+        flash[:notice] = "No Attachment"
+      end
+      redirect_to add_url
     end
   end
 
   def show
     begin
       document = Document.find(params[:id])
-      path = "documents/#{document.name}"
+      path = document.path
       File.open(path, "r") do |f|
         send_data f.read, :filename => document.name
       end
@@ -57,18 +46,15 @@ class DocumentsController < ApplicationController
   end
 
   def destroy
-    begin
-      @document = Document.find(params[:id])
-      if @document.user_id == session[:user_id] || current_user.admin?
-        begin
-          File.delete("documents/"+@document.name)
+    if document = Document.find(params[:id])
+      if document.user_id == session[:user_id] || current_user.admin?
+          File.delete(document.path)
           Document.delete(params[:id])
           flash[:notice]="File deleted"
-        rescue
-          flash[:notice]="You do not own this file"
-        end
+      else
+        flash[:notice]="You do not own this file"
       end
-    rescue
+    else
       flash[:notice]="No such file"
     end
     redirect_to root_url
