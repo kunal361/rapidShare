@@ -12,7 +12,6 @@ class User < ActiveRecord::Base
 
   def change_role(role)
     self.update_attribute(:role, role)
-    return true
   end
 
 end

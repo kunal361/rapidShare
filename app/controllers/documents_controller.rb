@@ -3,33 +3,23 @@ class DocumentsController < ApplicationController
   before_filter :require_user, :only => [:new, :index, :destroy, :show]
 
   def index
-    if current_user.admin?
-      @documents = Document.all
-    else
-      @documents = current_user.documents
-    end
+      @documents = current_user.admin? ? Document.all : current_user.documents
   end
 
   def new
+    @document = Document.new
   end
 
   def create
     description = params[:document][:description]
-    document = params[:document][:doc]
-    temp = current_user.documents.build(:path => document, :description => description)
-    if temp.save
+    temp = params[:document][:doc]
+    @document = current_user.documents.build(:path => temp, :description => description)
+    if @document.save
       flash[:notice]="File Uploaded Successfully!"
-      redirect_to documents_url
+      redirect_to documents_path
     else
-      flash[:notice]=""
-      errors = temp.errors.full_messages
-      errors.each do |error|
-        flash[:notice] += error
-      end
-      if flash[:notice].empty?
-        flash[:notice] = "No Attachment"
-      end
-      redirect_to add_url
+      flash[:notice]="Error uploading files"
+      render new_document_path
     end
   end
 

@@ -7,7 +7,7 @@ class CreateDocuments < ActiveRecord::Migration
       t.references :user
       t.timestamps
     end
-    add_index :documents, :name, :unique => true
+    add_index :documents, :path, :unique => true
   end
 
   def self.down

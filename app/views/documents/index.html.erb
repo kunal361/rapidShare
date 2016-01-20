@@ -3,9 +3,9 @@
   <div id="docs" style="width: 200px">
     <%@documents.each do |document|%>
       <div class="doc" style="border: 1px solid;width: 100%">
-        Document:<a class ="link" href='/document/<%=document.id%>'><%=document.name%></a>
+        Document:<%=link_to document.name, document_path(document)%>
         <p class="description">Description: <%=document.description%><p>
-        <%= link_to "Delete", "/delete_document/#{document.id}", :method => "delete" %>
+        <%= link_to "Delete", document_path(document), :method => "delete" %>
       </div>
     <%end%>
   </div>

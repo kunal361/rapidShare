@@ -6,8 +6,8 @@ class Document < ActiveRecord::Base
   after_destroy :delete_document
 
   validates :description, :presence => true
-  validates :name, :presence => true, :uniqueness =>true
-  validates :path, :presence => true
+  validates :name, :presence => true
+  validates :path, :presence => true, :uniqueness =>true
   validates :user_id, :presence => true
 
   private
@@ -16,10 +16,11 @@ class Document < ActiveRecord::Base
     return false if self.path.nil?
     @document = self.path
     self.name = File.basename(@document.original_filename)
+    hash = DateTime.now.strftime("%Q")
+    hashed_name = "#{hash}_#{self.name}"
     dir = "documents/"
     Dir.mkdir(dir) unless File.exists?(dir)
-    self.path = File.join(dir, name)
-    return true
+    self.path = File.join(dir, hashed_name)
   end
 
   def upload

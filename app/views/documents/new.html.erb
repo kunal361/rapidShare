@@ -13,7 +13,16 @@
     return true;
   }
 </script>
-<%= form_for(:document, :url => add_url, :multipart => true, :id => "myform") do |f|%>
+<%if @document.errors%>
+  <div id = "errors">
+    <%@document.errors.full_messages.each do |error|%>
+      <p>
+        <%=error%>
+      </p>
+    <%end%>
+  </div>
+<%end%>
+<%= form_for @document, :multipart => true, :id => "myform" do |f|%>
   <p>
     <%= f.label "document" %>
     <%= f.file_field :doc %><br/>
