@@ -19,22 +19,19 @@ class DocumentsController < ApplicationController
   end
 
   def new
+    @document = Document.new
   end
 
   def create
     description = params[:document][:description]
-    document = params[:document][:doc]
-    temp = current_user.documents.build(:document => document, :description => description)
-    if temp.save
+    temp = params[:document][:doc]
+    @document = current_user.documents.build(:document => temp, :description => description)
+    if @document.save
       flash[:notice]="File Uploaded Successfully!"
-      redirect_to documents_url
+      redirect_to documents_path
     else
-      flash[:notice]=""
-      errors = temp.errors.full_messages
-      errors.each do |error|
-        flash[:notice] += "#{error}. "
-      end
-      redirect_to add_url
+      flash[:notice]="Error uploading file"
+      render new_document_path
     end
   end
 

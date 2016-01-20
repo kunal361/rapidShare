@@ -10,23 +10,6 @@ class UsersController < ApplicationController
   end
 
   def create
-    name = params[:user][:name]
-    email = params[:user][:email]
-    password = params[:user][:password]
-    user = User.new({:name => name, :email => email, :password => password})
-    if user.save
-      session[:user_id] = user.id
-      flash[:notice]="Sucessfully signed up..."
-      redirect_to root_url
-    else
-      errors = user.errors.full_messages
-      puts errors
-      flash[:notice] = ""
-      errors.each do |error|
-        flash[:notice] += "#{error}. "
-      end
-      redirect_to signup_url
-    end
   end
 
   def destroy
@@ -45,7 +28,7 @@ class UsersController < ApplicationController
     else
       flash[:notice]="No Such User"
     end
-    redirect_to users_url
+    redirect_to users_path
   end
 
   def d_admin
@@ -55,7 +38,7 @@ class UsersController < ApplicationController
     else
       flash[:notice]="No Such User"
     end
-    redirect_to users_url
+    redirect_to users_path
   end
 
 end

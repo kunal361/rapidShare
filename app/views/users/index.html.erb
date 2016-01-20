@@ -4,7 +4,7 @@
       <div>Name: <%=user.name%></div>
       <div>Email: <%=user.email%></div>
       <div>Join date: <%=user.created_at%></div>
-      <div><%= link_to "Delete User", "/delete_user/#{user.id}", :method => "delete" %></div>
+      <div><%= link_to "Delete User", user_path(user), :method => "delete" %></div>
       <div>
         <%if user.admin?%>
           <%= link_to "Delete Admin", "/delete_admin/#{user.id}", :method => "put" %>

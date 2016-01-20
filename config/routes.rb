@@ -2,15 +2,9 @@ RapidShare::Application.routes.draw do
   devise_for :users
 
   root :to => 'documents#redirect'
+  resources :documents, :except => [:edit, :put]
+  resources :users, :only => [:index, :destroy]
 
-  get '/documents' => 'documents#index'
-  get '/add' => 'documents#new'
-  post '/add' => 'documents#create'
-  get '/document/:id' => 'documents#show'
-  delete '/delete_document/:id' => 'documents#destroy'
-
-  get '/users' => 'users#index'
-  delete '/delete_user/:id' => 'users#destroy'
   put '/add_admin/:id' => 'users#a_admin'
   put '/delete_admin/:id' => 'users#d_admin'
 
