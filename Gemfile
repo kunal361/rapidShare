@@ -6,12 +6,11 @@ gem 'rails', '3.2.11'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
-
-#gem "bcrypt-ruby", :require => "bcrypt"
 gem 'jquery-rails'
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'pry-rails'
 gem 'paperclip'
+gem 'devise'
 # Use unicorn as the web server
 # gem 'unicorn'
 

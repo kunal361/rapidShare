@@ -7,34 +7,30 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
-  <% if flash.now[:notice] %>
-    <div id="notice" style="background-color:red"><%= flash[:notice] %></div>
+  <div style="background-color:red" id="banner">
+    <p id="notice"><%= notice %></p>
+    <p id="alert"><%= alert %></p>
     <script type="text/javascript">
-      var notice = document.getElementById("notice");
-      notice.style.opacity=1;
+      var banner = document.getElementById("banner");
+      banner.style.opacity=1;
       var interval = setInterval(function(){
-        notice.style.opacity-=0.01;
+        banner.style.opacity-=0.01;
       },100);
       setTimeout(function(){
         clearInterval(interval);
-        notice.remove();
+        banner.remove();
       },5000);
     </script>
-    <%flash[:notice]=nil%>
-  <% end %>
+  </div>
   <div class="nav">
     <% if current_user %>
       <ul>
         <li><%= current_user.email %></li>
+        <li><%= link_to "Edit Account", "/users/edit"%></li>
         <li><%= link_to "View Documents", root_url%></li>
         <li><%= link_to "Add Document", add_url, :method => "get" %></li>
         <% if current_user.admin? %><li><%= link_to "Users", users_url%></li><%end%>
         <li><%= link_to "Log out", logout_url, :method => "delete" %></li>
-      </ul>
-    <% else %>
-      <ul>
-        <li><%= link_to "Log in", login_url %></a></li>
-        <li><%= link_to "Sign up", signup_url %></a></li>
       </ul>
     <% end %>
   </div>

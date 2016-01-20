@@ -1,6 +1,14 @@
 class DocumentsController < ApplicationController
 
-  before_filter :require_user, :only => [:new, :index, :destroy, :show]
+  before_filter :authenticate_user!, :only => [:new, :index, :destroy, :show]
+
+  def redirect
+    if current_user
+      redirect_to documents_url
+    else
+      redirect_to login_url
+    end
+  end
 
   def index
     if current_user.admin?
@@ -32,7 +40,7 @@ class DocumentsController < ApplicationController
 
   def show
     if document = Document.find_by_id(params[:id])
-      path = document.path
+      path = document.document.path
       File.open(path, "r") do |f|
         send_data f.read, :filename => document.name
       end
@@ -44,7 +52,7 @@ class DocumentsController < ApplicationController
 
   def destroy
     if document = Document.find_by_id(params[:id])
-      if document.user_id == session[:user_id] || current_user.admin?
+      if document.user_id == current_user.id || current_user.admin?
         Document.destroy(params[:id])
         flash[:notice]="File deleted"
       else

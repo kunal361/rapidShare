@@ -22,5 +22,8 @@ RapidShare::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   config.assets.enabled = true
+
+  #devise config
+  config.action_mailer.default_url_options = { :host => 'localhost', :port => 3000 }
 end
 

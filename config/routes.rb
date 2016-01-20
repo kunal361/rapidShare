@@ -1,6 +1,7 @@
 RapidShare::Application.routes.draw do
+  devise_for :users
 
-  root :to => 'documents#index'
+  root :to => 'documents#redirect'
 
   get '/documents' => 'documents#index'
   get '/add' => 'documents#new'
@@ -9,16 +10,15 @@ RapidShare::Application.routes.draw do
   delete '/delete_document/:id' => 'documents#destroy'
 
   get '/users' => 'users#index'
-  get '/signup' => 'users#new'
-  post '/signup' => 'users#create'
   delete '/delete_user/:id' => 'users#destroy'
   put '/add_admin/:id' => 'users#a_admin'
   put '/delete_admin/:id' => 'users#d_admin'
 
-  get '/login' => 'sessions#new'
-  post '/login' => 'sessions#create'
-  delete '/logout' => 'sessions#destroy'
-
+  devise_scope :user do
+    get '/login' => 'devise/sessions#new'
+    post '/login' => 'devise/sessions#create'
+    delete '/logout' => 'devise/sessions#destroy'
+  end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

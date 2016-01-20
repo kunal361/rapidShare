@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
 
-  before_filter :redirect_if_signed_in?, :only => [:new]
   before_filter :require_admin, :only => [:index, :destroy, :d_admin, :a_admin]
 
   def index
